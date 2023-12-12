@@ -627,6 +627,37 @@ defmodule Stripe.Account do
         |> Stripe.Request.put_method(:get)
         |> Stripe.Request.make_request()
       end
+
+      @spec retrieve_by_id(account :: binary, params :: %{optional(:expand) => list(binary)}, opts :: Keyword.t()) ::
+              {:ok, Stripe.Account.t()} | {:error, Stripe.ApiErrors.t()} | {:error, term()}
+      def retrieve_by_id(account, params \\ %{}, opts \\ []) do
+        path =
+          Stripe.OpenApi.Path.replace_path_params(
+            "/v1/accounts/{account}",
+            [
+              %OpenApiGen.Blueprint.Parameter{
+                in: "path",
+                name: "account",
+                required: true,
+                schema: %OpenApiGen.Blueprint.Parameter.Schema{
+                  name: "account",
+                  title: nil,
+                  type: "string",
+                  items: [],
+                  properties: [],
+                  any_of: []
+                }
+              }
+            ],
+            [account]
+          )
+
+        Stripe.Request.new_request(opts)
+        |> Stripe.Request.put_endpoint(path)
+        |> Stripe.Request.put_params(params)
+        |> Stripe.Request.put_method(:get)
+        |> Stripe.Request.make_request()
+      end
     )
   )
 
