@@ -1,4 +1,4 @@
-ExUnit.start()
+ExUnit.start(exclude: [:skip])
 # Stripe.start
 Application.ensure_all_started(:erlexec)
 Application.ensure_all_started(:exexec)
@@ -11,7 +11,7 @@ unless System.get_env("SKIP_STRIPE_MOCK_RUN") do
 end
 
 api_base_url = System.get_env("STRIPE_API_BASE_URL") || "http://localhost:12111"
-api_upload_url = System.get_env("STRIPE_API_UPLOAD_URL") || "http://localhost:12112/v1/"
+api_upload_url = System.get_env("STRIPE_API_UPLOAD_URL") || "http://localhost:12111"
 
 Application.put_env(:stripity_stripe, :api_base_url, api_base_url)
 Application.put_env(:stripity_stripe, :api_upload_url, api_upload_url)

@@ -2,13 +2,13 @@ defmodule Stripe.Mixfile do
   use Mix.Project
 
   @source_url "https://github.com/code-corps/stripity_stripe"
-  @version "3.1.1"
+  @version "3.2.0"
 
   def project do
     [
       app: :stripity_stripe,
       version: @version,
-      elixir: "~> 1.10",
+      elixir: "~> 1.11",
       deps: deps(),
       docs: docs(),
       package: package(),
@@ -30,8 +30,7 @@ defmodule Stripe.Mixfile do
   # Configuration for the OTP application
   def application do
     [
-      applications: apps(Mix.env()),
-      extra_applications: [:plug],
+      extra_applications: [],
       env: env(),
       mod: {Stripe, []}
     ]
@@ -44,7 +43,7 @@ defmodule Stripe.Mixfile do
   defp env do
     [
       api_base_url: "https://api.stripe.com",
-      api_upload_url: "https://files.stripe.com/v1/",
+      api_upload_url: "https://files.stripe.com",
       pool_options: [
         timeout: 5_000,
         max_connections: 10
@@ -53,23 +52,20 @@ defmodule Stripe.Mixfile do
     ]
   end
 
-  defp apps(:test), do: apps()
-  defp apps(_), do: apps()
-  defp apps, do: [:hackney, :logger, :jason, :uri_query]
-
   defp deps do
     [
-      {:dialyxir, "1.1.0", only: [:dev, :test], runtime: false},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
-      {:excoveralls, "~> 0.14.1", only: :test},
       {:hackney, "~> 1.18"},
-      {:inch_ex, "~> 2.0", only: [:dev, :test]},
-      {:mox, "~> 0.4", only: :test},
       {:jason, "~> 1.1"},
       {:telemetry, "~> 1.1"},
-      {:uri_query, "~> 0.1.2"},
-      {:exexec, "~> 0.1.0", only: :test},
-      {:plug, "~> 1.14", optional: true}
+      {:uri_query, "~> 0.2.0"},
+      {:plug, "~> 1.14", optional: true},
+      # Non-production dependencies
+      {:inch_ex, ">= 0.0.0", only: [:dev, :test]},
+      {:mox, ">= 0.0.0", only: :test},
+      {:erlexec, "~> 2.0", only: :test},
+      {:dialyxir, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false},
+      {:excoveralls, ">= 0.0.0", only: :test}
     ]
   end
 

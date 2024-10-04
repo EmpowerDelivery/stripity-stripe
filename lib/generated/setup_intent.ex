@@ -132,7 +132,7 @@ defmodule Stripe.SetupIntent do
               | :unionpay
               | :unknown
               | :visa,
-            optional(:request_three_d_secure) => :any | :automatic,
+            optional(:request_three_d_secure) => :any | :automatic | :challenge,
             optional(:three_d_secure) => three_d_secure
           }
   )
@@ -215,7 +215,7 @@ defmodule Stripe.SetupIntent do
     @type financial_connections :: %{
             optional(:permissions) =>
               list(:balances | :ownership | :payment_method | :transactions),
-            optional(:prefetch) => list(:balances),
+            optional(:prefetch) => list(:balances | :transactions),
             optional(:return_url) => binary
           }
   )
@@ -289,13 +289,7 @@ defmodule Stripe.SetupIntent do
 
   (
     @typedoc "Additional fields for Mandate creation"
-    @type mandate_options :: %{
-            optional(:custom_mandate_url) => binary | binary,
-            optional(:default_for) => list(:invoice | :subscription),
-            optional(:interval_description) => binary,
-            optional(:payment_schedule) => :combined | :interval | :sporadic,
-            optional(:transaction_type) => :business | :personal
-          }
+    @type mandate_options :: %{optional(:collection_method) => :paper}
   )
 
   (
@@ -472,6 +466,7 @@ defmodule Stripe.SetupIntent do
     @typedoc "If this is a `us_bank_account` SetupIntent, this sub-hash contains details about the US bank account payment method options."
     @type us_bank_account :: %{
             optional(:financial_connections) => financial_connections,
+            optional(:mandate_options) => mandate_options,
             optional(:networks) => networks,
             optional(:verification_method) => :automatic | :instant | :microdeposits
           }
