@@ -290,7 +290,7 @@ defmodule Stripe.Invoice do
     @type financial_connections :: %{
             optional(:permissions) =>
               list(:balances | :ownership | :payment_method | :transactions),
-            optional(:prefetch) => list(:balances)
+            optional(:prefetch) => list(:balances | :transactions)
           }
   )
 
@@ -385,12 +385,14 @@ defmodule Stripe.Invoice do
                 | :card
                 | :cashapp
                 | :customer_balance
+                | :eps
                 | :fpx
                 | :giropay
                 | :grabpay
                 | :ideal
                 | :konbini
                 | :link
+                | :p24
                 | :paynow
                 | :paypal
                 | :promptpay
