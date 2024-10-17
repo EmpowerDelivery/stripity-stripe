@@ -1,6 +1,7 @@
 name: stripe-codegen
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -41,8 +42,6 @@ jobs:
 
     env:
       LATEST_STRIPE_SDK_TAG: ${{ needs.check.outputs.latest_tag }}
-      OTP_VERSION: "25.0"
-      ELIXIR_VERSION: "1.14.0"
       SKIP_STRIPE_MOCK_RUN: true
 
     strategy:
@@ -58,8 +57,8 @@ jobs:
 
       - uses: erlef/setup-beam@v1
         with:
-          otp-version: ${{ env.OTP_VERSION }}
-          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: "26"
+          elixir-version: "1.16"
 
       - name: Checkout stripe/openapi (official OpenApi definitions)
         uses: actions/checkout@v2
@@ -78,14 +77,14 @@ jobs:
       - name: Test generated code
         run: |
           mix stripe.generate
+      - name: Run formatter
+        run: mix format
       - name: Test generated code
         run: |
           mix test
       - name: Generate docs
         run: |
           mix docs
-      - name: Run formatter
-        run: mix format
       - name: Update latest tag file
         run: |
           echo "${LATEST_STRIPE_SDK_TAG}" > .latest-tag-stripe-openapi-sdk
